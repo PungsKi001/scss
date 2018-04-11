@@ -507,5 +507,12 @@ triangle例子
 
 //css style
 //-------------------------------
-.test { content: ""; height: 0; width: 0; border-top: 12px solid #ff5200; border-right: 12px dashed transparent; border-left: 12px dashed transparent; }
+.test {
+  content: "";
+  height: 0;
+  width: 0;
+  border-top: 12px solid #ff5200;
+  border-right: 12px dashed transparent;
+  border-left: 12px dashed transparent;
+}
 ```
