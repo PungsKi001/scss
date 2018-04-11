@@ -377,15 +377,113 @@ $samllFontSize : $baseFontSize - 2px !default;
   >可一个单独使用，也可以和 @else结合多条件使用
 + 三目判断
   + `if($condition, $if_true, $if_false)`
-    >条件，条件为真的值，条件为假的值
+
+    条件，条件为真的值，条件为假的值
 + @for循环
   + `@for $var from <start> through <end>`
-    >through表示包括end这个数；
+
+    through表示包括end这个数；
   + `@for $var from <start> to <end>`
-    >to表示不包括end这个数
 
+    to表示不包括end这个数
++ @each
+  + `@each $var in <list or map>`
 
+    $var表示变量，而list和map表示list类型数据和map类型数据。sass 3.3.0新加入了多字段循环和map数据循环；
 
+    >
+
+### 单个字段list数据循环 ###
+
+```scss
+//sass style
+//-------------------------------
+$animal-list: puma, sea-slug, egret, salamander;
+@each $animal in $animal-list {
+  .#{$animal}-icon {
+    background-image: url('/images/#{$animal}.png');
+  }
+}
+
+//css style
+//-------------------------------
+.puma-icon {
+  background-image: url('/images/puma.png'); 
+}
+.sea-slug-icon {
+  background-image: url('/images/sea-slug.png'); 
+}
+.egret-icon {
+  background-image: url('/images/egret.png'); 
+}
+.salamander-icon {
+  background-image: url('/images/salamander.png'); 
+}
+```
+
+### 多个字段list数据循环 ###
+
+```scss
+//sass style
+//-------------------------------
+$animal-data: (puma, black, default),(sea-slug, blue, pointer),(egret, white, move);
+@each $animal, $color, $cursor in $animal-data {
+  .#{$animal}-icon {
+    background-image: url('/images/#{$animal}.png');
+    border: 2px solid $color;
+    cursor: $cursor;
+  }
+}
+
+//css style
+//-------------------------------
+.puma-icon {
+  background-image: url('/images/puma.png');
+  border: 2px solid black;
+  cursor: default; 
+}
+.sea-slug-icon {
+  background-image: url('/images/sea-slug.png');
+  border: 2px solid blue;
+  cursor: pointer; 
+}
+.egret-icon {
+  background-image: url('/images/egret.png');
+  border: 2px solid white;
+  cursor: move; 
+}
+```
+
+### 多个字段map数据循环 ###
+
+```scss
+//sass style
+//-------------------------------
+$headings: (h1: 2em, h2: 1.5em, h3: 1.2em);
+@each $header, $size in $headings {
+  #{$header} {
+    font-size: $size;
+  }
+}
+
+//css style
+//-------------------------------
+h1 {
+  font-size: 2em; 
+}
+h2 {
+  font-size: 1.5em; 
+}
+h3 {
+  font-size: 1.2em; 
+}
+```
+
+triangle例子
+
+```scss
+//sass style
+//-------------------------------
 @mixin triangle($direction, $size, $borderColor) {
   $dirArray: (top, bottom), (right, left);
   content: "";
@@ -403,11 +501,11 @@ $samllFontSize : $baseFontSize - 2px !default;
     }
   }
 }
-
 .test {
   @include triangle(bottom, 12px, #ff5200);
 }
 
-
-
+//css style
+//-------------------------------
 .test { content: ""; height: 0; width: 0; border-top: 12px solid #ff5200; border-right: 12px dashed transparent; border-left: 12px dashed transparent; }
+```
