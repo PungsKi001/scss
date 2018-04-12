@@ -1,6 +1,6 @@
-# 基于个人关于scss的笔记 #
+# 基于个人关于scss问题的笔记 #
 
-编写：PungsKi
+编写：PungsKi(彭苏琦)
 
 ## 1.vue加入scss的方法 ##
 
