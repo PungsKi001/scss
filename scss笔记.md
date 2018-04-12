@@ -2,6 +2,8 @@
 
 编写：PungsKi(彭苏琦)
 
+版本:1.1
+
 ## 1.vue加入scss的方法 ##
 
 >package.json内加入
@@ -18,10 +20,10 @@ devDependencies:{
 
 >或者
 
-```scss
-cnpm install sass --save
-cnpm install node-sass --save-dev
-cnpm install sass-loader --save-dev
+```bash
+$cnpm install sass --save
+$cnpm install node-sass --save-dev
+$cnpm install sass-loader --save-dev
 ```
 
 ## 2.导入scss样式 ##
@@ -293,9 +295,11 @@ $lte7:true;
 ```scss
 //sass style
 //-------------------------------
-@function px2rem($px, $base: 16) {
-  @return ($px / $base) * 1rem;
+$designWidth:375;
+@function px2rem($px) {
+  @return $px*320/$designWidth/20+rem;
 }
+
 p {
   font-size: px2rem(20);
 }
@@ -408,16 +412,16 @@ $animal-list: puma, sea-slug, egret, salamander;
 //css style
 //-------------------------------
 .puma-icon {
-  background-image: url('/images/puma.png'); 
+  background-image: url('/images/puma.png');
 }
 .sea-slug-icon {
-  background-image: url('/images/sea-slug.png'); 
+  background-image: url('/images/sea-slug.png');
 }
 .egret-icon {
-  background-image: url('/images/egret.png'); 
+  background-image: url('/images/egret.png');
 }
 .salamander-icon {
-  background-image: url('/images/salamander.png'); 
+  background-image: url('/images/salamander.png');
 }
 ```
 
@@ -440,17 +444,17 @@ $animal-data: (puma, black, default),(sea-slug, blue, pointer),(egret, white, mo
 .puma-icon {
   background-image: url('/images/puma.png');
   border: 2px solid black;
-  cursor: default; 
+  cursor: default;
 }
 .sea-slug-icon {
   background-image: url('/images/sea-slug.png');
   border: 2px solid blue;
-  cursor: pointer; 
+  cursor: pointer;
 }
 .egret-icon {
   background-image: url('/images/egret.png');
   border: 2px solid white;
-  cursor: move; 
+  cursor: move;
 }
 ```
 
@@ -469,13 +473,13 @@ $headings: (h1: 2em, h2: 1.5em, h3: 1.2em);
 //css style
 //-------------------------------
 h1 {
-  font-size: 2em; 
+  font-size: 2em;
 }
 h2 {
-  font-size: 1.5em; 
+  font-size: 1.5em;
 }
 h3 {
-  font-size: 1.2em; 
+  font-size: 1.2em;
 }
 ```
 
@@ -516,3 +520,65 @@ triangle例子
   border-left: 12px dashed transparent;
 }
 ```
+
+## 11.屏幕自适应问题 ##
+
++ 使用hotcss方案
+  >字体可缩小到系统默认字体以下，解决移动端1px问题
+
+```js
+// main.js，引入hotcss.js
+import './api/hotcss'
+```
+
+```scss
+//scss style
+//-------------------------------
+$designWidth:375;//页面宽度
+@function px2rem($px) {
+  @return $px*320/$designWidth/20+rem;
+}
+.test{
+  font-size:px2rem(14);
+}
+```
+
++ 使用lib-flexible + px2rem方案
+  >字体无法缩小到系统默认字体以下
+
+```bash
+$cnpm install lib-flexible --save-dev
+$cnpm install px2rem-loader --save-dev
+```
+
+```js
+// utils.js
+const px2remLoader = {
+  loader: 'px2rem-loader',
+  options: {
+    remUnit: 37.5 // 设计稿的宽度/10
+  }
+}
+function generateLoaders(loader, loaderOptions) {
+  const loaders = [cssLoader, px2remLoader]
+  if (loader) {
+    loaders.push({
+      loader: loader + '-loader',
+      options: Object.assign({}, loaderOptions, {
+        sourceMap: options.sourceMap
+      })
+    })
+  }
+}
+```
+
+```scss
+//scss style
+//-------------------------------
+$designWidth:375;//页面宽度
+@function px2rem($px) {
+  @return $px*320/$designWidth/20+rem;
+}
+.test{
+  font-size:px2rem(14);
+}
